@@ -30,6 +30,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 		http.Error(w, "Invalid input", http.StatusBadRequest)
+		return
 	}
 
 	var m machine.Machine
@@ -47,6 +48,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 		http.Error(w, "Could not marshal output", http.StatusInternalServerError)
+		return
 	}
 	w.Header().Set("Content-Type", "application/json")
 	fmt.Fprintf(w, string(wBody))
