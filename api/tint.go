@@ -4,21 +4,37 @@ import (
   "fmt"
 	"net/http"
 	"io/ioutil"
+	"encoding/json"
 	builder "github.com/dajinchu/tint/builder/yaml"
 	"github.com/cjcodell1/tint/machine"
 )
+
+type Input struct {
+    Accept []string
+    Reject []string
+		Machine string
+		MachineType string
+}
 
 func Handler(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
     panic(err)
 	}
-	fmt.Printf("%s", body)
-	fmt.Fprintf(w, "<h1>Hello from Go!</h1>")
+
+	var i Input
+	err = json.Unmarshal(body, &i)
+	if err != nil {
+		// respond with 400
+	}
+
 	var m machine.Machine
 	var machineType = "one-way-tm"
-	m, err = builder.Build(string(body), machineType)
-	fmt.Fprintf(w, "%d", test(m, "0 1 0"))
+	m, err = builder.Build(i.Machine, machineType)
+
+	for _, s := range i.Accept {
+		fmt.Fprintf(w, "%d", test(m, s))
+	}
 }
 
 type Result int
