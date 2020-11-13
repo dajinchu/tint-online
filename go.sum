@@ -2,6 +2,8 @@ github.com/cjcodell1/tint v0.0.0-20200604191417-b63be41b2b0d h1:4K4PSoncPJ1NAFbJ
 github.com/cjcodell1/tint v0.0.0-20200604191417-b63be41b2b0d/go.mod h1:WyvCD9I99EZdKsx/WCcyWZc6iOEorPM9dx0/Vf+55uU=
 github.com/dajinchu/tint v0.0.0-20201113210811-2fc35bcd19f3 h1:ARYdVPWCE0sqQJ8CyG3pUwj7bQjQrR7J+Yfx1Sieh4s=
 github.com/dajinchu/tint v0.0.0-20201113210811-2fc35bcd19f3/go.mod h1:FLhKy4dEwFnO6TZo8wyC9BYwHZ2TL7lj/bsoMqLZRik=
+github.com/dajinchu/tint v0.0.0-20201113211847-e92b16504819 h1:K1DGZxMr7FKiJw4zfyDIhs7qR6vYmaWbeZn8vjlZk1k=
+github.com/dajinchu/tint v0.0.0-20201113211847-e92b16504819/go.mod h1:FLhKy4dEwFnO6TZo8wyC9BYwHZ2TL7lj/bsoMqLZRik=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/yaml.v2 v2.3.0 h1:clyUAQHOM3G0M3f5vQj7LuJrETvjVot3Z5el9nffUtU=
 gopkg.in/yaml.v2 v2.3.0/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
