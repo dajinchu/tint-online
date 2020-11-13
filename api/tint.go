@@ -2,7 +2,6 @@ package handler
 
 import (
 	"fmt"
-	"strings"
 	"net/http"
 	"io/ioutil"
 	"encoding/json"
@@ -55,7 +54,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 type Result struct {
 	Status ResultStatus `json:"status"`
-	Verbose string      `json:"verbose"`
+	Verbose []string    `json:"verbose"`
 }
 type ResultStatus int
 
@@ -68,11 +67,11 @@ const (
 func test(m machine.Machine, input string) Result {
 	var err error
 	var status ResultStatus
-	var verbose strings.Builder
+	var verbose []string
 	conf := m.Start(input)
 	for {
 		// print verbosely
-		verbose.WriteString(conf.Print())
+		verbose = append(verbose, conf.Print())
 
 		// check if accept or reject and break
 		if m.IsAccept(conf) {
@@ -89,10 +88,9 @@ func test(m machine.Machine, input string) Result {
 			status = Error
 			break
 		}
-		verbose.WriteString("\n")
 	}
 	return Result {
 		Status: status,
-		Verbose: verbose.String(),
+		Verbose: verbose,
 	}
 }
