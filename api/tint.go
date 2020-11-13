@@ -31,7 +31,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	var i Input
 	err = json.Unmarshal(body, &i)
 	if err != nil {
-		// respond with 400
+		fmt.Println(err)
+		http.Error(w, "Invalid input", http.StatusBadRequest)
 	}
 
 	var m machine.Machine
@@ -46,7 +47,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	var wBody []byte
 	wBody, err = json.Marshal(out)
 	if err != nil {
-		// respond with 500
+		fmt.Println(err)
+		http.Error(w, "Could not marshal output", http.StatusInternalServerError)
 	}
 	fmt.Fprintf(w, string(wBody))
 }
