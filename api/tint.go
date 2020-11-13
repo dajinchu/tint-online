@@ -44,6 +44,9 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	for _, s := range i.Accept {
 		out.AcceptResults = append(out.AcceptResults, test(m, s))
 	}
+	for _, s := range i.Reject {
+		out.RejectResults = append(out.RejectResults, test(m, s))
+	}
 
 	var wBody []byte
 	wBody, err = json.Marshal(out)
