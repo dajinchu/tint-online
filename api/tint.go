@@ -11,15 +11,15 @@ import (
 )
 
 type Input struct {
-	accept []string
-	reject []string
-	machine string
-	machineType string
+	Accept []string      `json:"accept"`
+	Reject []string      `json:"reject"`
+	Machine string       `json:"machine"`
+	MachineType string   `json:"machineType"`
 }
 
 type Output struct {
-	acceptResults []Result
-	rejectResults []Result
+	AcceptResults []Result `json:"acceptResults"`
+	RejectResults []Result `json:"rejectResults"`
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {
@@ -37,11 +37,12 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	var m machine.Machine
 	var machineType = "one-way-tm"
-	m, err = builder.Build(i.machine, machineType)
+	m, err = builder.Build(i.Machine, machineType)
 
+	// Run tests
 	var out Output
-	for _, s := range i.accept {
-		out.acceptResults = append(out.acceptResults, test(m, s))
+	for _, s := range i.Accept {
+		out.AcceptResults = append(out.AcceptResults, test(m, s))
 	}
 
 	var wBody []byte
@@ -50,12 +51,13 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		http.Error(w, "Could not marshal output", http.StatusInternalServerError)
 	}
+	w.Header().Set("Content-Type", "application/json")
 	fmt.Fprintf(w, string(wBody))
 }
 
 type Result struct {
-	status ResultStatus
-	verbose string
+	Status ResultStatus `json:"status"`
+	Verbose string      `json:"verbose"`
 }
 type ResultStatus int
 
@@ -80,17 +82,19 @@ func test(m machine.Machine, input string) Result {
 			break
 		} else if m.IsReject(conf) {
 			status = Reject
+			break
 		}
 
 		// step
 		conf, err = m.Step(conf)
 		if err != nil {
 			status = Error
+			break
 		}
 		verbose.WriteString("\n")
 	}
 	return Result {
-		status: status,
-		verbose: verbose.String(),
+		Status: status,
+		Verbose: verbose.String(),
 	}
 }
