@@ -11,8 +11,7 @@ import (
 )
 
 type Input struct {
-	Accept []string      `json:"accept"`
-	Reject []string      `json:"reject"`
+	Tests []string      `json:"tests"`
 	Machine string       `json:"machine"`
 	MachineType string   `json:"machineType"`
 }
@@ -41,10 +40,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	// Run tests
 	var out Output
-	for _, s := range i.Accept {
-		out.AcceptResults = append(out.AcceptResults, test(m, s))
-	}
-	for _, s := range i.Reject {
+	for _, s := range i.Tests {
 		out.RejectResults = append(out.RejectResults, test(m, s))
 	}
 
