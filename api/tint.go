@@ -17,8 +17,7 @@ type Input struct {
 }
 
 type Output struct {
-	AcceptResults []Result `json:"acceptResults"`
-	RejectResults []Result `json:"rejectResults"`
+	Results []Result `json:"results"`
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {
@@ -41,7 +40,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	// Run tests
 	var out Output
 	for _, s := range i.Tests {
-		out.RejectResults = append(out.RejectResults, test(m, s))
+		out.Results = append(out.Results, test(m, s))
 	}
 
 	var wBody []byte
