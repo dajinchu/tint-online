@@ -1,7 +1,8 @@
 package handler
 
 import (
-  "fmt"
+	"fmt"
+	"strings"
 	"net/http"
 	"io/ioutil"
 	"encoding/json"
@@ -10,10 +11,15 @@ import (
 )
 
 type Input struct {
-    Accept []string
-    Reject []string
-		Machine string
-		MachineType string
+	accept []string
+	reject []string
+	machine string
+	machineType string
+}
+
+type Output struct {
+	acceptResults []Result
+	rejectResults []Result
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {
@@ -30,41 +36,59 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	var m machine.Machine
 	var machineType = "one-way-tm"
-	m, err = builder.Build(i.Machine, machineType)
+	m, err = builder.Build(i.machine, machineType)
 
-	for _, s := range i.Accept {
-		fmt.Fprintf(w, "%d", test(m, s))
+	var out Output
+	for _, s := range i.accept {
+		out.acceptResults = append(out.acceptResults, test(m, s))
 	}
+
+	var wBody []byte
+	wBody, err = json.Marshal(out)
+	if err != nil {
+		// respond with 500
+	}
+	fmt.Fprintf(w, string(wBody))
 }
 
-type Result int
+type Result struct {
+	status ResultStatus
+	verbose string
+}
+type ResultStatus int
 
 const (
-	Accept Result = 1
+	Accept ResultStatus = 1
   Reject = 0
 	Error = -1
 )
 
 func test(m machine.Machine, input string) Result {
 	var err error
+	var status ResultStatus
+	var verbose strings.Builder
 	conf := m.Start(input)
 	for {
 		// print verbosely
-		// if verboseFlag {
-		// 	fmt.Println(conf.Print())
-		// }
+		verbose.WriteString(conf.Print())
 
 		// check if accept or reject and break
 		if m.IsAccept(conf) {
-			return 1
+			status = Accept
+			break
 		} else if m.IsReject(conf) {
-			return 0
+			status = Reject
 		}
 
 		// step
 		conf, err = m.Step(conf)
 		if err != nil {
-			return -1
+			status = Error
 		}
+		verbose.WriteString("\n")
+	}
+	return Result {
+		status: status,
+		verbose: verbose.String(),
 	}
 }
