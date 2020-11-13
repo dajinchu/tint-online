@@ -3,9 +3,10 @@ package handler
 import (
   "fmt"
 	"net/http"
-	"gopkg.in/yaml.v2"
-	 "github.com/dajinchu/tint/builder/yaml"
-	 "github.com/dajinchu/tint/machine"
+	"io/ioutil"
+	// "gopkg.in/yaml.v2"
+	//  "github.com/dajinchu/tint/builder/yaml"
+	//  "github.com/dajinchu/tint/machine"
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
@@ -14,7 +15,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
     panic(err)
 	}
 
-	fmt.Printf("%s", b)
+	fmt.Printf("%s", body)
   fmt.Fprintf(w, "<h1>Hello from Go!</h1>")
 	// m, err = yaml.Build(config, machineFlag)
 }
