@@ -20,9 +20,13 @@ type Output struct {
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-    panic(err)
+    		http.Error(w, "Missing request body", http.StatusBadRequest)
 	}
 
 	var i Input
